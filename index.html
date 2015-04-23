@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script language="javascript" src="js/jquery.js"></script>
+<title>蹩脚的demo</title>
+
+</head>
+<script language="javascript">
+var right;
+var percent;
+var content;
+var answer;
+var s_name;
+var a_name;
+var html = new Array();
+
+function play(name){
+
+$("#choose_screen").hide();
+$("#play_screen").show();
+
+s_name = name +".json";
+a_name = name +".mp3";
+$("#song").attr("src",a_name);
+$.getJSON(s_name, function(json){
+ answer = json.answer;
+ console.log(json.content);
+ content = json.content;
+ html.length = 0;
+ for (i=0;i<content.length;i++){
+ html += "<p>"+ content[i]+"</p>";
+ 
+ };
+ 
+ $("#lyric_box").html(html);
+ $("del").after('<input type="text" name="1" class="missed" id="input">');
+ $("del").remove();
+
+
+
+});
+};
+
+
+$(document).ready(function()
+{
+
+
+
+$("#play_screen").hide();
+
+
+
+
+
+$("#submit").bind("click",function(){
+	right = 0;
+	percent = 0;
+	for (i=0;i<answer.length;i++){
+
+		if ($(".missed").eq(i).val() == answer[i]){
+
+		right += 1;
+		
+	}
+	
+
+
+    }
+	percent = (right/answer.length )*100
+	alert("your answer is "+ percent+"% right, you sucker!!");
+
+});
+
+
+$("#play").bind("click",function(){
+
+var audio = document.getElementById('song');
+
+audio.play(); 
+
+
+});
+
+
+$("#stop").bind("click",function(){
+
+var audio = document.getElementById('song');
+
+audio.pause(); 
+
+
+});
+
+
+$("#back").bind("click",function(){
+$("#lyric_box").html("");
+$("#play_screen").hide();
+$("#choose_screen").show();
+
+
+});
+
+});
+</script>
+
+<body>
+<div id="choose_screen">
+
+
+<h4>Choose your melody</h4>
+	<p onclick="play('falling');" style="cursor:pointer;">Falling Slowly</p>
+	<p onclick="play('lost');" style="cursor:pointer;">Lost Stars</p>
+	
+
+
+
+
+</div>
+
+<div id="play_screen">
+<div id="lyric_box">
+
+</div>
+
+<div class="bar_fixed" style="width:100%;position:fixed;bottom:0px;left:0px;">
+	<button id="play">Play the music</button>
+	<button id="stop">Stop the music</button>
+	<button id="submit">Done!</button>
+	<button id="back">Back</button>
+</div>
+</div>
+     
+<audio src="#"  id="song">
+</audio>
+
+</body>
+
+</html>
